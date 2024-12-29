@@ -36,8 +36,7 @@ public partial class App : Node {
   private void OnQuitButtonPressed() => Logic.Input(new AppLogic.Input.QuitClick());
 }
 
-[Meta]
-[LogicBlock(typeof(State), Diagram = true)]
+[Meta, LogicBlock(typeof(State), Diagram = true)]
 public partial class AppLogic : LogicBlock<AppLogic.State> {
   public override Transition GetInitialState() => To<State.InMainMenu>();
 
@@ -53,8 +52,8 @@ public partial class AppLogic : LogicBlock<AppLogic.State> {
     public record struct QuitApp;
   }
 
-  public abstract partial record State : StateLogic<State> {
-    public partial record InMainMenu : State, IGet<Input.NewGameClick>, IGet<Input.QuitClick> {
+  public abstract record State : StateLogic<State> {
+    public record InMainMenu : State, IGet<Input.NewGameClick>, IGet<Input.QuitClick> {
       public Transition On(in Input.NewGameClick input) => To<InGame>();
 
       public Transition On(in Input.QuitClick input) => To<ClosingApplication>();
