@@ -1,9 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7u41drxii2pn"]
+[gd_scene load_steps=3 format=3 uid="uid://c7u41drxii2pn"]
 
 [ext_resource type="Script" path="res://src/app/App.cs" id="1_dwe10"]
+[ext_resource type="PackedScene" uid="uid://cywpu6lxdjhuu" path="res://src/game/Game.tscn" id="2_pifse"]
 
 [node name="App" type="Node"]
 script = ExtResource("1_dwe10")
+_gameScene = ExtResource("2_pifse")
 
 [node name="UI" type="CanvasLayer" parent="."]
 

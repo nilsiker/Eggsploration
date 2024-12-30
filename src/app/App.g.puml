@@ -5,11 +5,15 @@ state "AppLogic State" as Eggsploration_AppLogic_State {
   state "ClosingApplication" as Eggsploration_AppLogic_State_ClosingApplication
 }
 
+Eggsploration_AppLogic_State_InGame --> Eggsploration_AppLogic_State_InMainMenu : RequestQuitGame
 Eggsploration_AppLogic_State_InMainMenu --> Eggsploration_AppLogic_State_ClosingApplication : QuitClick
 Eggsploration_AppLogic_State_InMainMenu --> Eggsploration_AppLogic_State_InGame : NewGameClick
 
 Eggsploration_AppLogic_State_ClosingApplication : OnEnter → QuitApp
 Eggsploration_AppLogic_State_InGame : OnEnter → StartNewGame
+Eggsploration_AppLogic_State_InGame : OnExit → RemoveGame
+Eggsploration_AppLogic_State_InMainMenu : OnEnter → UpdateMainMenuVisibility
+Eggsploration_AppLogic_State_InMainMenu : OnExit → UpdateMainMenuVisibility
 
 [*] --> Eggsploration_AppLogic_State_InMainMenu
 @enduml
