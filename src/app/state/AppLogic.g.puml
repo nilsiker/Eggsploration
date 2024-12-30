@@ -1,0 +1,24 @@
+@startuml AppLogic
+state "AppLogic State" as Eggsploration_AppLogic_State {
+  state "ClosingApplication" as Eggsploration_AppLogic_State_ClosingApplication
+  state "FadingOut" as Eggsploration_AppLogic_State_FadingOut
+  state "InGame" as Eggsploration_AppLogic_State_InGame
+  state "InMainMenu" as Eggsploration_AppLogic_State_InMainMenu
+}
+
+Eggsploration_AppLogic_State_FadingOut --> Eggsploration_AppLogic_State_ClosingApplication : FadeOutFinished
+Eggsploration_AppLogic_State_FadingOut --> Eggsploration_AppLogic_State_InGame : FadeOutFinished
+Eggsploration_AppLogic_State_FadingOut --> Eggsploration_AppLogic_State_InMainMenu : FadeOutFinished
+Eggsploration_AppLogic_State_InGame --> Eggsploration_AppLogic_State_FadingOut : RequestQuitGame
+Eggsploration_AppLogic_State_InMainMenu --> Eggsploration_AppLogic_State_FadingOut : NewGameClick
+Eggsploration_AppLogic_State_InMainMenu --> Eggsploration_AppLogic_State_FadingOut : QuitClick
+
+Eggsploration_AppLogic_State_ClosingApplication : OnEnter → QuitApp
+Eggsploration_AppLogic_State_FadingOut : OnEnter → FadeOut
+Eggsploration_AppLogic_State_InGame : OnEnter → FadeIn, StartNewGame
+Eggsploration_AppLogic_State_InGame : OnExit → RemoveGame
+Eggsploration_AppLogic_State_InMainMenu : OnEnter → FadeIn, UpdateMainMenuVisibility
+Eggsploration_AppLogic_State_InMainMenu : OnExit → UpdateMainMenuVisibility
+
+[*] --> Eggsploration_AppLogic_State_InMainMenu
+@enduml
