@@ -9,7 +9,8 @@
     "coverage/**/*.*",
     ".godot/**/*.*",
     "**/*.tres",
-    "addons/**/*.*"
+    "addons/**/*.*",
+    "*.g.puml"
   ],
   "words": [
     "Andreas",
