@@ -1,8 +1,8 @@
 @startuml AppLogic
 state "AppLogic State" as Eggsploration_AppLogic_State {
-  state "InMainMenu" as Eggsploration_AppLogic_State_InMainMenu
-  state "InGame" as Eggsploration_AppLogic_State_InGame
   state "ClosingApplication" as Eggsploration_AppLogic_State_ClosingApplication
+  state "InGame" as Eggsploration_AppLogic_State_InGame
+  state "InMainMenu" as Eggsploration_AppLogic_State_InMainMenu
 }
 
 Eggsploration_AppLogic_State_InGame --> Eggsploration_AppLogic_State_InMainMenu : RequestQuitGame

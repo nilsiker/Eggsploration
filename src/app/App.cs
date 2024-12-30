@@ -1,8 +1,5 @@
 namespace Eggsploration;
 
-using System;
-using Chickensoft.Introspection;
-using Chickensoft.LogicBlocks;
 using Godot;
 
 public partial class App : Node {
@@ -66,55 +63,4 @@ public partial class App : Node {
   private void OnOutputUpdateMainMenuVisibility(bool visible) =>
     GetNode<Control>("UI/MainMenu").Visible = visible;
   #endregion
-}
-
-[Meta, LogicBlock(typeof(State), Diagram = true)]
-public partial class AppLogic : LogicBlock<AppLogic.State> {
-  public override Transition GetInitialState() => To<State.InMainMenu>();
-
-  public static class Input {
-    public record struct NewGameClick;
-
-    public record struct RequestQuitGame;
-
-    public record struct QuitClick;
-  }
-
-  public static class Output {
-    public record struct StartNewGame;
-
-    public record struct RemoveGame;
-
-    public record struct QuitApp;
-
-    public record struct UpdateMainMenuVisibility(bool Visible);
-  }
-
-  public abstract record State : StateLogic<State> {
-    public record InMainMenu : State, IGet<Input.NewGameClick>, IGet<Input.QuitClick> {
-      public InMainMenu() {
-        this.OnEnter(() => Output(new Output.UpdateMainMenuVisibility(true)));
-        this.OnExit(() => Output(new Output.UpdateMainMenuVisibility(false)));
-      }
-
-      public Transition On(in Input.NewGameClick input) => To<InGame>();
-
-      public Transition On(in Input.QuitClick input) => To<ClosingApplication>();
-    }
-
-    public record InGame : State, IGet<Input.RequestQuitGame> {
-      public InGame() {
-        this.OnEnter(() => Output(new Output.StartNewGame()));
-        this.OnExit(() => Output(new Output.RemoveGame()));
-      }
-
-      public Transition On(in Input.RequestQuitGame input) => To<InMainMenu>();
-    }
-
-    public record ClosingApplication : State {
-      public ClosingApplication() {
-        this.OnEnter(() => Output(new Output.QuitApp()));
-      }
-    }
-  }
 }
