@@ -1,5 +1,6 @@
 namespace Eggsploration;
 
+using System;
 using Godot;
 
 public partial class App : Node {
@@ -11,6 +12,7 @@ public partial class App : Node {
   #region Nodes
   [Export]
   private PackedScene _gameScene = default!;
+  private AnimationPlayer _animPlayer = default!;
   private Button _newGameButton = default!;
   private Button _quitButton = default!;
   private Game? _game;
@@ -20,8 +22,11 @@ public partial class App : Node {
     Logic = new AppLogic();
     Binding = Logic.Bind();
 
+    _animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
     _newGameButton = GetNode<Button>("%NewGameButton");
     _quitButton = GetNode<Button>("%QuitButton");
+
+    _animPlayer.AnimationFinished += OnAnimationPlayerAnimationFinished;
     _newGameButton.Pressed += OnNewGameButtonPressed;
     _quitButton.Pressed += OnQuitButtonPressed;
 
@@ -32,7 +37,9 @@ public partial class App : Node {
       .Handle(
         (in AppLogic.Output.UpdateMainMenuVisibility output) =>
           OnOutputUpdateMainMenuVisibility(output.Visible)
-      );
+      )
+      .Handle((in AppLogic.Output.FadeOut output) => OnOutputFadeOut())
+      .Handle((in AppLogic.Output.FadeIn output) => OnOutputFadeIn());
   }
 
   public override void _UnhandledInput(InputEvent @event) {
@@ -42,6 +49,12 @@ public partial class App : Node {
   }
 
   #region Input Handlers
+  private void OnAnimationPlayerAnimationFinished(StringName animation) {
+    if (animation == "fade_out") {
+      Logic.Input(new AppLogic.Input.FadeOutFinished());
+    }
+  }
+
   private void OnNewGameButtonPressed() => Logic.Input(new AppLogic.Input.NewGameClick());
 
   private void OnQuitButtonPressed() => Logic.Input(new AppLogic.Input.QuitClick());
@@ -62,5 +75,10 @@ public partial class App : Node {
 
   private void OnOutputUpdateMainMenuVisibility(bool visible) =>
     GetNode<Control>("UI/MainMenu").Visible = visible;
+
+  private void OnOutputFadeOut() => _animPlayer.Play("fade_out");
+
+  private void OnOutputFadeIn() => _animPlayer.Play("fade_in");
+
   #endregion
 }
